@@ -106,13 +106,13 @@ Account.method('validatePassword', function validatePassword(password: string) {
     return this.password === hashed;
 } );
 
-Account.method('generateToken', function makeToken() {
-    const payload = {
+Account.method('makeToken', function makeToken() {
+    const payload: any= {
         _id: this.id,
         profile: this.profile,
-    };
+    };    
 
-    return generateToken(payload, 'account');
+    return generateToken(payload);
     
 })
 

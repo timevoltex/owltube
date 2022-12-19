@@ -43,6 +43,18 @@ export const localRegister = async (ctx: Koa.ParameterizedContext) => {
         ctx.throw(String(e), 500);
     
     }
+
+    let token = null;
+    try{
+        token = await account.makeToken();
+    }catch(e) {
+        ctx.throw(String(e), 500);
+    }
+
+    ctx.cookies.set('access_token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
     
 
     ctx.body = account.profile;
@@ -66,7 +78,6 @@ export const localLogin = async (ctx: Koa.ParameterizedContext) => {
 
     try{
         account = await Account.findByEmail(email);
-        console.log(account);
     }catch(e) {
         ctx.throw(String(e), 500);
     }
@@ -75,6 +86,20 @@ export const localLogin = async (ctx: Koa.ParameterizedContext) => {
         ctx.status = 403;
         return;
     }
+
+
+    let token = null;
+    try{
+        token = await account.makeToken();
+    }catch(e) {
+        ctx.throw(String(e), 500);
+    }
+
+    ctx.cookies.set('access_token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+    
 
     ctx.body =  account.profile;
 }
@@ -96,5 +121,20 @@ export const exsist = async (ctx: Koa.ParameterizedContext) => {
 }
 
 export const logout = async (ctx: Koa.ParameterizedContext) => {
-    ctx.body = 'logout';
+    ctx.cookies.set('access_token', null, {
+        httpOnly: true,
+        maxAge: 0,
+    });
+    ctx.status = 204;
+}
+
+export const check = (ctx: Koa.ParameterizedContext) => {
+    const {user} = ctx.request as any;
+
+    if(!user) {
+        ctx.status = 403;
+        return;
+    }
+
+    ctx.body = user.profile;
 }
