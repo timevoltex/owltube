@@ -1,18 +1,27 @@
- import crypto from 'crypto';
- import Koa from 'koa';
- import Router from '@koa/router';
+require('dotenv').config();
+
+import Koa from 'koa';
+import Router from '@koa/router';
 import api from 'api';
+import bodyParser from 'koa-bodyparser';
+import mongoose from 'mongoose';
 
  const app = new Koa();
  const router = new Router();
- const password = 'abc123';
- const secret = 'MySecretKey1$1$234';
 
- const hashed = crypto.createHmac('sha256', secret).update(password).digest('hex');
+mongoose.Promise = global.Promise;
+mongoose.set('strictQuery', false)
 
- console.log(hashed);
+mongoose.connect(process.env.MONGO_URL!, {
+},).then((_) => {
+    console.log('Successfully connected to mongodb');
+}).catch((e) => console.error(e));
+
+const port = process.env.PORT || 4000;
+
  router.use('/api', api.routes());
 
- app.use(router.routes()).use(router.allowedMethods());
+ app.use(bodyParser()).use(router.routes()).use(router.allowedMethods());
 
- app.listen(4000, () => {});
+
+ app.listen(port, () => {});

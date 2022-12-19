@@ -6,6 +6,7 @@ import api from 'api';
 import mongoose from 'mongoose';
 import bodyParser from 'koa-bodyparser';
 
+
 const app = new Koa();
 const router = new Router();
 
@@ -13,7 +14,7 @@ mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false)
 
 mongoose.connect(process.env.MONGO_URL!, {
-},).then((response) => {
+},).then((_) => {
     console.log('Successfully connected to mongodb');
 }).catch((e) => console.error(e));
 
