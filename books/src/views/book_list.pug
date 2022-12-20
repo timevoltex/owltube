@@ -6,8 +6,5 @@ html(lang="ko")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Document
     body 
-        div(style="color: red")
-            p hello #{name}
-            p this is next Generation App for dining 
-
-            a(href=url; ) next Generation
+        each val in book
+            p #{val.authors.map((e) => e.name)}

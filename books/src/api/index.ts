@@ -1,8 +1,12 @@
-import Router from '@koa/router';
-import books from 'api/books';
+import Router from "@koa/router";
+import books from "api/books";
 
 const api = new Router();
 
-api.use('/books', books.routes())
+api.get("/", (ctx) => {
+  ctx.redirect("/api/books");
+});
+
+api.use("/books", books.routes());
 
 export default api;
