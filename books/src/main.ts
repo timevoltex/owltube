@@ -6,6 +6,7 @@ import api from "api";
 import mongoose from "mongoose";
 import bodyParser from "koa-bodyparser";
 import views from "koa-views";
+import cors from "@koa/cors";
 
 const app = new Koa();
 const router = new Router();
@@ -33,8 +34,13 @@ router.get("/", (ctx) => {
 router.use("/api", api.routes());
 
 app
-  .use(bodyParser())
+  .use(
+    bodyParser({
+      enableTypes: ["form"],
+    })
+  )
   .use(render)
+  .use(cors())
   .use(router.routes())
   .use(router.allowedMethods());
 
