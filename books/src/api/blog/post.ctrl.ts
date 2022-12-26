@@ -93,7 +93,18 @@ async function list(ctx: ParameterizedContext) {
       order: [["id", "DESC"]],
     });
 
-    ctx.body = posts;
+    const postCount = posts.length;
+    ctx.set("Last-Page", String(Math.ceil(postCount / 10)));
+
+    ctx.body = posts.map((e) => ({
+      ...e.dataValues,
+      body:
+        e === undefined
+          ? undefined
+          : e.body!.length < 200
+          ? e.body
+          : `${e.body!.slice(0, 200)}...`,
+    }));
   } catch (e) {
     ctx.throw(String(e), 500);
   }

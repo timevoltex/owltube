@@ -33,7 +33,7 @@ const Blog = db.define<BlogModel>("Blog", {
 });
 
 (async () => {
-  await db.sync({ alter: true });
+  await Blog.sync({ alter: true });
 })();
 
 export default Blog;
