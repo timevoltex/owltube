@@ -1,5 +1,6 @@
 import Blog from "../../models/blog";
 import { ParameterizedContext } from "koa";
+import { z } from "zod";
 
 interface BlogRequest {
   title: string;
@@ -66,8 +67,32 @@ async function update(ctx: ParameterizedContext) {
 }
 
 async function list(ctx: ParameterizedContext) {
+  let page: number;
+  if (ctx.query.page !== undefined) {
+    if (ctx.query.page === typeof Array) {
+      page = parseInt(ctx.query.page[0] || "1", 10);
+    } else {
+      page = parseInt(<string>ctx.query.page || "1", 10);
+    }
+  } else {
+    page = 1;
+  }
+  let offset = 0;
+  if (page < 1) {
+    ctx.status = 400;
+    return;
+  }
+  if (page > 1) {
+    offset = 10 * (page - 1);
+  }
+
   try {
-    const posts = await Blog.findAll();
+    const posts = await Blog.findAll({
+      limit: 10,
+      offset: offset,
+      order: [["id", "DESC"]],
+    });
+
     ctx.body = posts;
   } catch (e) {
     ctx.throw(String(e), 500);
