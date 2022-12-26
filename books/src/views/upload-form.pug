@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Document
+    body
+        p this is upload page
+        form(action="/api/upload/single", method="POST", enctype="multipart/form-data",)
+            input(type="file", name="file", )
+        
+            button(type="submit",  ) upload
+
+        p uploaded list 
+        ul
+            each buffer, name in fileMap
+                li
+                    div(style="display: flex; justify-content: space-between;")
+                        p=name+ ":"+ "??"
+                        image(src="data:image/png;base64,"+buffer, alt=name, width="100px", height="100px")

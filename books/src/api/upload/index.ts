@@ -8,6 +8,9 @@ const uploadTarget = multer({
       cb(null, __dirname + "/uploads/");
     },
     filename: function (req, file, cb) {
+      file.originalname = Buffer.from(file.originalname, "latin1").toString(
+        "utf-8"
+      );
       cb(null, file.originalname);
     },
   }),
@@ -15,6 +18,11 @@ const uploadTarget = multer({
 
 const upload = new Router();
 
-upload.post("/single", uploadTarget.single("file"), uploadRouter.uploadSingle);
+upload.post(
+  "/single",
+  uploadTarget.fields([{ name: "file" }, { name: "video" }]),
+  uploadRouter.uploadSingle
+);
+upload.get("/", uploadRouter.uploadPage);
 
 export default upload;

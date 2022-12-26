@@ -1,0 +1,9 @@
+{
+	"dependencies": {
+		"mime": "^3.0.0",
+		"sequelize": "^6.28.0"
+	},
+	"devDependencies": {
+		"@types/mime": "^3.0.1"
+	}
+}
