@@ -1,10 +1,13 @@
 import {
+  CreationOptional,
   DataTypes,
+  ForeignKey,
   InferAttributes,
   InferCreationAttributes,
   Model,
 } from "sequelize";
-import db from "./index";
+import db from "./db";
+import User from "./user";
 
 interface BlogModel
   extends Model<
@@ -14,6 +17,7 @@ interface BlogModel
   id?: number;
   title: string;
   body?: string;
+  userName?: ForeignKey<User["username"]>;
 }
 
 const Blog = db.define<BlogModel>("Blog", {
@@ -29,6 +33,12 @@ const Blog = db.define<BlogModel>("Blog", {
   },
   body: {
     type: DataTypes.STRING,
+    allowNull: true,
+  },
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
   },
 });
 

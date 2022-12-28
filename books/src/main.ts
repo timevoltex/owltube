@@ -6,6 +6,7 @@ import api from "api";
 import bodyParser from "koa-bodyparser";
 import views from "koa-views";
 import cors from "@koa/cors";
+import jwtMiddleWare from "lib/jwt_middle_ware";
 
 const app = new Koa();
 const router = new Router();
@@ -28,6 +29,7 @@ app
       enableTypes: ["form", "json"],
     })
   )
+  .use(jwtMiddleWare)
   .use(render)
   .use(cors())
   .use(router.routes())
