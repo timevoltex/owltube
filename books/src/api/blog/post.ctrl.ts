@@ -9,16 +9,22 @@ interface BlogRequest {
 
 async function write(ctx: ParameterizedContext) {
   const { title, body } = <BlogRequest>ctx.request.body!;
+  console.log(ctx.state);
+
   try {
     const post = {
       title: title,
       body: body,
       userName: ctx.state.user.username,
     };
-    const pt = await model.Blog.create(post);
+
+    console.log(post);
+    const pt = await model.Blog.create(post, {});
+
+    console.log(pt);
 
     await pt.save();
-    ctx.body = "ok";
+    ctx.body = pt;
   } catch (e) {
     ctx.throw(String(e), 500);
   }
@@ -44,7 +50,7 @@ async function getPostById(ctx: ParameterizedContext, next: Next) {
 async function checkOwnPost(ctx: ParameterizedContext, next: Next) {
   const { user, post } = ctx.state;
   console.log(ctx.state);
-  if (post.username !== user.username) {
+  if (post.userName !== user.username) {
     ctx.status = 403;
     return;
   }
@@ -106,6 +112,7 @@ async function list(ctx: ParameterizedContext) {
     limit: 10,
     offset: offset,
     order: [["id", "DESC"]],
+    raw: true,
   };
 
   try {
@@ -115,7 +122,7 @@ async function list(ctx: ParameterizedContext) {
     ctx.set("Last-Page", String(Math.ceil(postCount / 10)));
 
     ctx.body = posts.map((e) => ({
-      ...e.dataValues,
+      ...e,
       body:
         e === undefined
           ? undefined

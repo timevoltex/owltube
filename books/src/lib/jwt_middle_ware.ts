@@ -12,6 +12,8 @@ const jwtMiddleWare = (ctx: ParameterizedContext, next: Next) => {
       username: decoded.username,
     };
 
+    console.log(decoded);
+
     return next();
   } catch (e) {
     console.log(e);

@@ -58,6 +58,7 @@ async function login(ctx: ParameterizedContext) {
     const user = await model.User.findOne({
       where: { username: username },
     });
+
     if (!user) {
       ctx.status = 401;
       return;

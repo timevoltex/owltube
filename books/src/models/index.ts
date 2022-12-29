@@ -2,7 +2,10 @@ import db from "models/db";
 import Blog from "models/blog";
 import User from "models/user";
 
-Blog.belongsTo(User, { foreignKey: "username" });
+Blog.belongsTo(User, {
+  foreignKey: { name: "userName" },
+  targetKey: "username",
+});
 
 db.sync({ force: false }).then(function () {
   console.log("Database Synced");

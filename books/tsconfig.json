@@ -8,18 +8,16 @@
     "strict": true,
     "outDir": "dist",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "baseUrl": "src/",
     "plugins": [
       {
-        "transform": "typescript-transform-paths",
+        "transform": "typescript-transform-paths"
       }
-    ]
+    ],
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"]
 }

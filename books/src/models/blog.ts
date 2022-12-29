@@ -1,49 +1,33 @@
 import {
-  CreationOptional,
-  DataTypes,
-  ForeignKey,
-  InferAttributes,
-  InferCreationAttributes,
   Model,
-} from "sequelize";
-import db from "./db";
+  Table,
+  Column,
+  DataType,
+  BelongsTo,
+} from "sequelize-typescript";
 import User from "./user";
+@Table({ name: { singular: "Blog" } })
+class Blog extends Model {
+  @Column({ type: DataType.STRING, allowNull: false })
+  title!: string;
 
-interface BlogModel
-  extends Model<
-    InferAttributes<BlogModel>,
-    InferCreationAttributes<BlogModel>
-  > {
-  id?: number;
-  title: string;
+  @Column({ type: DataType.STRING, allowNull: true })
   body?: string;
-  userName?: ForeignKey<User["username"]>;
+
+  // @BelongsTo(() => User, {
+  //   foreignKey: { name: "userName" },
+  //   targetKey: "username",
+  //   onDelete: "CASCADE",
+  // })
+  // @Column({
+  //   type: DataType.STRING,
+  //   references: {
+  //     model: "Users",
+  //     key: "username",
+  //   },
+  //   allowNull: false,
+  // })
+  // userName!: string;
 }
-
-const Blog = db.define<BlogModel>("Blog", {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  body: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  userName: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    unique: true,
-  },
-});
-
-(async () => {
-  await Blog.sync({ alter: true });
-})();
 
 export default Blog;
